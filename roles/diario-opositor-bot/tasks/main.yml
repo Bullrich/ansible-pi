@@ -1,12 +1,14 @@
 ---
 # tasks file for diario-opositor-bot
+- name: create user
+  user: name=dob system=yes
+
 - name: Create directory for the bot
   file:
     state: directory
     path: "{{item}}"
     mode: 0755
-    owner: "{{ username }}"
-    group: "{{username}}"
+
   with_items:
     - "{{project_folder}}/"
     - "{{project_folder}}/configs"
@@ -16,8 +18,9 @@
 
 - name: Copy python files
   copy: src=diario-opositor-bot/ dest={{project_folder}}/ mode=755
-  become_user: '{{username}}'
 
+- name: Transforming the bot start script into executable
+  file: dest={{project_folder}}/diario_opositor_bot.py mode=a+x
 
 - name: Install pip
   yum:
@@ -25,18 +28,20 @@
     state: latest
 
 - name: Install python packages
-  command: sudo pip install -r requirements.txt
-  args:
-    chdir: '{{project_folder}}'
+  pip:
+    requirements: '{{project_folder}}/requirements.txt'
 
-- name: Execute the bot
-  command: 'python diario_opositor_bot.py > bot_log.txt'
-  become_user: '{{username}}'
-  args:
-    chdir: '{{project_folder}}/'
-  register: pythonOut
-
-- name: Write python output
-  copy:
-    content: "{{pythonOut.stdout}}"
+- name: Create python output
+  file:
+    content: ""
     dest: "{{project_folder}}/bot_log.txt"
+    mode: 755
+    force: no
+    owner: dob
+    group: dob
+
+- name: copy dob service
+  template: src=dob.service dest=/usr/lib/systemd/system/reddit_dob.service
+
+- name: enable dob
+  service: name=reddit_dob.service enabled=yes state=started

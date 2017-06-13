@@ -1,0 +1,14 @@
+[Unit]
+Description=Diario Opositor Bot
+After=network.target
+
+[Service]
+Type=simple
+User=dob
+Group=dob
+LimitNOFILE=65536
+WorkingDirectory=/opt/dob/
+ExecStart=/opt/dob/diario_opositor_bot.py > /opt/dob/bot_log.txt
+
+[Install]
+WantedBy=multi-user.target
