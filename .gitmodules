@@ -1,0 +1,3 @@
+[submodule "roles/diario-opositor-bot/files"]
+	path = roles/diario-opositor-bot/files
+	url = https://github.com/Bullrich/Diario-Opositor-Bot.git
