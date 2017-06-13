@@ -1,2 +1,42 @@
 ---
 # tasks file for diario-opositor-bot
+- name: Create directory for the bot
+  file:
+    state: directory
+    path: "{{item}}"
+    mode: 0755
+    owner: "{{ username }}"
+    group: "{{username}}"
+  with_items:
+    - "{{project_folder}}/"
+    - "{{project_folder}}/configs"
+    - "{{project_folder}}/database"
+    - "{{project_folder}}/reddit"
+    - "{{project_folder}}/rss"
+
+- name: Copy python files
+  copy: src=diario-opositor-bot/ dest={{project_folder}}/ mode=755
+  become_user: '{{username}}'
+
+
+- name: Install pip
+  yum:
+    name: python-pip
+    state: latest
+
+- name: Install python packages
+  command: sudo pip install -r requirements.txt
+  args:
+    chdir: '{{project_folder}}'
+
+- name: Execute the bot
+  command: 'python diario_opositor_bot.py > bot_log.txt'
+  become_user: '{{username}}'
+  args:
+    chdir: '{{project_folder}}/'
+  register: pythonOut
+
+- name: Write python output
+  copy:
+    content: "{{pythonOut.stdout}}"
+    dest: "{{project_folder}}/bot_log.txt"
