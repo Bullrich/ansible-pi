@@ -22,11 +22,6 @@
 - name: Transforming the bot start script into executable
   file: dest={{project_folder}}/diario_opositor_bot.py mode=a+x
 
-- name: Install pip
-  yum:
-    name: python-pip
-    state: latest
-
 - name: Install python packages
   pip:
     requirements: '{{project_folder}}/requirements.txt'
@@ -39,9 +34,10 @@
     force: no
     owner: dob
     group: dob
+    state: touch
 
 - name: copy dob service
-  template: src=dob.service dest=/usr/lib/systemd/system/reddit_dob.service
+  template: src=dob.service dest=/usr/lib/systemd/system/dob.service
 
 - name: enable dob
-  service: name=reddit_dob.service enabled=yes state=started
+  service: name=dob.service enabled=yes state=started

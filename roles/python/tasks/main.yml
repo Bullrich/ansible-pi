@@ -1,0 +1,12 @@
+---
+- name: create python group
+  group: name=python
+
+- name: create python user
+  user: name=python group=python
+
+- name: install pip and virtualenv
+  yum: name={{ item }} state=present
+  with_items:
+    - python-pip
+    - python-virtualenv
