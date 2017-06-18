@@ -6,7 +6,8 @@
   user: name=python group=python
 
 - name: install pip and virtualenv
-  yum: name={{ item }} state=present
+  #yum: name={{ item }} state=present
+  action: apt install {{item}}
   with_items:
     - python-pip
     - python-virtualenv

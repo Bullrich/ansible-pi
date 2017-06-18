@@ -1,13 +1,14 @@
 ---
 # tasks file for diario-opositor-bot
 - name: create user
-  user: name=dob system=yes
+  user: name={{bot_user}} system=yes
 
 - name: Create directory for the bot
   file:
     state: directory
     path: "{{item}}"
     mode: 0755
+    owner: {{bot_user}}
 
   with_items:
     - "{{project_folder}}/"
@@ -20,7 +21,10 @@
   copy: src=diario-opositor-bot/ dest={{project_folder}}/ mode=755
 
 - name: Transforming the bot start script into executable
-  file: dest={{project_folder}}/diario_opositor_bot.py mode=a+x
+  file:
+    dest: {{project_folder}}/diario_opositor_bot.py
+    mode: a+x
+    owner: {{bot_user}}
 
 - name: Install python packages
   pip:

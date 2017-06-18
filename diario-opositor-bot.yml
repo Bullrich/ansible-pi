@@ -1,9 +1,8 @@
 ---
 - name: diario-opositor
   vars:
-    cluster: diario-opositor
+    cluster: dob
   hosts: cluster_{{ cluster }}
   become: yes
   roles:
-    - role: python
     - role: diario-opositor-bot

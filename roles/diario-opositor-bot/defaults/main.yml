@@ -1,4 +1,5 @@
 ---
 # defaults file for diario-opositor-bot
-project_folder: /opt/dob
+bot_user: dob
+project_folder: /usr/src/{{bot_user}}
 username: jbullrich
