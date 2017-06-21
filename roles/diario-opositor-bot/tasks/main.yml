@@ -8,8 +8,8 @@
     state: directory
     path: "{{item}}"
     mode: 0755
-    owner: {{bot_user}}
-
+    owner: '{{bot_user}}'
+    group: '{{bot_user}}'
   with_items:
     - "{{project_folder}}/"
     - "{{project_folder}}/configs"
@@ -22,26 +22,26 @@
 
 - name: Transforming the bot start script into executable
   file:
-    dest: {{project_folder}}/diario_opositor_bot.py
+    dest: '{{project_folder}}/diario_opositor_bot.py'
     mode: a+x
-    owner: {{bot_user}}
+    owner: '{{bot_user}}'
+    group: '{{bot_user}}'
 
 - name: Install python packages
   pip:
     requirements: '{{project_folder}}/requirements.txt'
 
-- name: Create python output
-  file:
-    content: ""
-    dest: "{{project_folder}}/bot_log.txt"
+- name: Generate signature.conf
+  copy:
+    dest: '{{project_folder}}/signature.conf'
+    content: '{{signature}}'
+    force: yes
+    group: '{{bot_user}}'
+    owner: '{{bot_user}}'
     mode: 755
-    force: no
-    owner: dob
-    group: dob
-    state: touch
 
-- name: copy dob service
+- name: Copy dob service
   template: src=dob.service dest=/usr/lib/systemd/system/dob.service
 
-- name: enable dob
+- name: Enable dob
   service: name=dob.service enabled=yes state=started

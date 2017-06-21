@@ -4,11 +4,11 @@ After=network.target
 
 [Service]
 Type=simple
-User=dob
-Group=dob
+User={{bot_user}}
+Group={{bot_user}}
 LimitNOFILE=65536
-WorkingDirectory=/opt/dob/
-ExecStart=/opt/dob/diario_opositor_bot.py > /opt/dob/bot_log.txt
+WorkingDirectory={{project_folder}}/
+ExecStart={{project_folder}}/diario_opositor_bot.py
 
 [Install]
 WantedBy=multi-user.target

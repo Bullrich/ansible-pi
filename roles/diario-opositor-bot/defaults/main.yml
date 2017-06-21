@@ -3,3 +3,4 @@
 bot_user: dob
 project_folder: /usr/src/{{bot_user}}
 username: jbullrich
+signature: False

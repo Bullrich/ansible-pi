@@ -5,9 +5,11 @@
 - name: create python user
   user: name=python group=python
 
-- name: install pip and virtualenv
-  #yum: name={{ item }} state=present
-  action: apt install {{item}}
+- name: install pip, virtualenv and python-dev
+  apt:
+    name: '{{item}}'
+    state: present
   with_items:
     - python-pip
     - python-virtualenv
+    - python-dev

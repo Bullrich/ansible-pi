@@ -1,8 +1,6 @@
 ---
 - name: diario-opositor
-  vars:
-    cluster: dob
-  hosts: cluster_{{ cluster }}
+  hosts: raspberry
   become: yes
   roles:
     - role: diario-opositor-bot
