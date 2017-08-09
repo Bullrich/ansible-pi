@@ -1,0 +1,6 @@
+---
+- name: watchman
+  hosts: raspberry
+  become: yes
+  roles:
+    - role: watchman

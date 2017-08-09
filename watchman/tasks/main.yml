@@ -1,0 +1,32 @@
+---
+# tasks file for watchman
+- name: Install requirements
+  apt:
+    name: {{item}}
+    state: present
+  with_items:
+    - openssl
+    - libtool
+    - npm
+    - git
+    - livssl-dev
+    - autoconf
+    - automake
+    - build-essential
+    - python-dev
+
+- name: Download watchman
+  git:
+    repo: 'https://github.com/facebook/watchman.git {{watchman_dir}}'
+    dest: {{watchman_dir}}
+
+- name: Execute commands in watchman
+  chdir: "{{watchman_dir}}"
+  command: {{item}}
+  with_items:
+    - '/.autogen.sh'
+    - './configure'
+    - 'make'
+    - 'make install'
+    - 'echo 999999 | tee -a /proc/sys/fs/inotify/max_user_watches  && echo 999999 | tee -a  /proc/sys/fs/inotify/max_queued_events && echo 999999 | tee  -a /proc/sys/fs/inotify/max_user_instances && watchman  shutdown-server'
+  become: true
